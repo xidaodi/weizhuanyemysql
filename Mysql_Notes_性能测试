@@ -1,0 +1,27 @@
+业务上线的测试：
+1，服务器测试；
+2，应用测试；
+3，数据库测试。
+
+Mysql测试分类：
+CPU Bound;(全内存测试)
+IO Bound ；（数据量远大于内存）
+四个细分场景：
+1，写入测试(insert);
+2, 更新测试（update）；
+3，纯读测试（select）；
+6，混合模式（上面三个按比例）。
+
+常用的测试工具：
+sysbench（业界综合型选手，可以测CPU，磁盘，oracle，db2等都可以测），推荐0.5版本;
+tpcc-mysql（很多大型互联网在用）；
+mysqlslap(mysql自己提供的一个测试工具，用的不多)
+
+测试性能指标：
+1，服务吞吐量（TPS，每秒钟的事务总数 , QPS每秒钟执行的所有的请求量 ）
+2，服务响应时间；
+3，服务并发性。
+
+sysbench 安装：http://wangshengzhuang.com/2017/05/21/数据库相关/MySQL/性能测试/sysbench%20简介、安装、使用说明/ 
+tpcc-mysql安装：https://www.hi-linux.com/posts/38534.html
+tpcc-mysql使用：（和教程中不太一样的地方）./tpcc_load -h 127.0.0.1 -P 3306 -d test0 -u ruchan -p esaye=mc2909  -w 1

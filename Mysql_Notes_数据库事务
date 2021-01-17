@@ -1,0 +1,34 @@
+##数据库事务控制操作
+
+# 开始一个事务
+	 start transaction;(更正统)
+		 or
+		 begin;
+	 commit;
+	 rollback (to savepoint);
+
+
+#清空标的数据
+	 truncate table t;
+	 
+# save ponit, 允许一个事务中中继节点
+
+# 修改隔离级别（隔离级别主要影响一个写，另一个读的情况）
+	show global variables like '%iso%';
+	set  global tx_isolation = 'READ-UNCOMMITED';
+
+#数据库的四种隔离级别：
+	未提交读；
+	已提交读；
+	可重复读；
+	可串行化(对并发性能影响比较大)。
+#数据库的三种隔离现象
+	脏读；
+	不可重复读；
+	幻读。
+	#不可重复读和幻读的区别在于：不可重复读针对的是delete update操作，幻读针对的是insert操作。
+
+## 建议在全局监督使用 readcommited 级别（同oracle）,或者建议使用默认的repeatable read
+	 
+	
+	

@@ -1,0 +1,82 @@
+#ubuntu 安装mysql
+apt-cache search mysql-server
+sudo apt-get install mysql-server-5.7
+ps -ef|grep mysqld
+sudo /etc/init.d/mysql status
+
+sudo /etc/init.d/mysql stop
+
+sudo mysql -uroot -p
+
+#ctr+r 搜索输入过的命令
+
+UNIX socket:            /var/run/mysqld/mysqld.sock
+
+DBA常用的两个命令：
+status；#数据库状态
+show processlist; #展示当前连接
+show global variables like 'socket';
+
+GRANT ALL PRIVILEGES ON *.* TO 'ruchan'@'%' IDENTIFIED BY 'esaye=mc2909' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+
+DML（data manipulation language）是数据操纵语言：它们是SELECT、UPDATE、INSERT、DELETE，就象它的名字一样，这4条命令是用来对数据库里的数据进行操作的语言。
+DDL（data definition language）是数据定义语言：DDL比DML要多，主要的命令有CREATE、ALTER、DROP等，DDL主要是用在定义或改变表（TABLE）的结构，数据类型，表之间的链接和约束等初始化工作上，他们大多在建立表时使用。
+DCL（DataControlLanguage）是数据库控制语言：是用来设置或更改数据库用户或角色权限的语句，包括（grant,deny,revoke等）语句。
+
+#DDL
+# 查看当前有哪些数据库
+show databases;
+
+# 使用名为test的数据库
+use test;
+
+# 创建一张学生表
+create table stu(
+id int(10),  name varchar(20),
+age int(10),
+ primary key(id));
+# 每一张表都需要包含一个主键，主键唯一标识一条记录，唯一的字段，不可重复不能为空，通过`primary key`关键字来定义。
+
+# 查看创建好的表
+show create table stu;
+
+# 新加一个字段
+alter table stu add column gender varchar(20);
+
+# 修改一个字段
+alter table stu modify column gender varchar(40);
+
+# 删除一个字段
+alter table stu drop column gender;
+
+# 删除表
+drop table stu;
+
+#DML
+# 查看当前数据库中的表
+show tables;
+
+# 向表中插入数据
+insert into stu(id,name,age) values(1,'pw',28);
+
+# 插入全部字段时可以只写表名
+insert into stu values(2,'nss',29);
+
+# 查看刚才添加的数据,"*"代表查询全部字段
+select * from stu;
+
+# 如果只想查询两个字段，则只写要查询的字段名
+select name,age from stu;
+
+# 也可以根据某个条件进行查询，比如只查询id为1的记录
+select nameage from stu where id=1;
+
+# 更新语句
+update stu set age=29 where id=1;
+
+# 删除表中的数据
+delete from stu where id=1;
+
+

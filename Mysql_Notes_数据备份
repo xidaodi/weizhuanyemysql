@@ -1,0 +1,67 @@
+#mysql 数据备份
+
+冷备份：停服，拷贝数据
+热备份：不停服，不影响应用读写，备份
+
+物理备份：以数据页的形式拷贝数据；
+逻辑备份：导出为裸数据或者SQL(Insert)语句。（恢复起来比较慢，适用于数据量少的情况，大的数据量还是适用于物理备份）
+
+全量备份：完整的数据库
+增量备份：只备份变化的部分
+
+考虑因素：
+数据库大小；恢复速度要求；备份方式（全量/增量）
+
+常用工具：
+1， mysqldump - 逻辑备份，热备 (Mysql自带工具，单线程，适合少量备份)
+2， xtrabackup - 物理备份，热备 （第三方开源工具，比较常用）
+3，LVM/Zfs snapshot - 物理备份
+4， mysqldumper - 逻辑备份，热备，第三方开源工具，Mysqldump的加强版，多线程
+5, cp - 关机，物理，冷备
+
+
+1，mysqldump:
+	mysqldump test user > /home/ruchan/mysqldump_test_user.sql //备份到指定目录
+	source /home/ruchan/mysqldump_test_user.sql; //在mysql中还原这个表
+	
+	Innodb引擎提供了可重复读级别，所以可以用mysqldump进行一致性备份；
+	mysqldump备份的时候会先锁表锁库再进行备份，为避免此现象，我们可以添加参数--single-transaction
+	mysqldump可以进行远程连接备份 ： mysqldump -u -p -h -P
+	导出格式为csv格式：mysqldump -u -p --single-transaction -T
+	可参考文章：https://www.jianshu.com/p/c3d8366326c1 
+	
+2，xtrabackup:支持流式备份，压缩备份
+
+如何制定备份策略：
+1，先看数据库中的表是不是都是innodb引擎表（如果是，可以进行热备）
+2，看数据量大小（数据量小，可以用mysqldump做逻辑备份，再大一些可以用xtrabackup做备份，再大一些可以用全量+增量备份方式）
+3，数据库本地空间是否充足（备份到本地or远程）
+4，恢复速度的要求（如果要求比较高，备份频率小时/天）
+
+#mysql 数据恢复
+1，用mysqldump恢复
+2，用xtrabackup 
+3，用mysqlbinlog恢复，可以通过反SQL语句恢复；结合前两种，恢复到某一操作或者某一时间点的数据。（binlog设置为row格式）
+
+#备份与恢复
+1，备份需求分析
+2，数据恢复原则：
+	恢复记录：binlog
+	恢复表,DB: 最近一次备份 + binlog
+	数据库回档： 备份+binlog
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

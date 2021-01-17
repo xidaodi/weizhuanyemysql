@@ -1,0 +1,86 @@
+##DDL
+#排序 order by
+	 select * from play_list order by bookedcount,trackcount;
+#去重  distinct
+	select distinct userid from play_list;
+#分组
+	select userid,count(*) from play_list group by userid having count(*) >= 2;
+#模糊查询
+	select play_name from play_list where play_name like '%孩%';
+#偏移量分页
+	select * from play_list where(createtime between 1427791323 and 1430383307) limit 10 offset 6;
+#把null值转化为0
+	select play_name,case when trackcount is null then 0 else trackcount end from play_list;
+#join 连接
+	select * from play_list,y_fav where play_list.id=play_fav.play_id and play_list.play_name='老男孩';
+	select * from play_list list join play_fav fav on list.id=fav.play_id where list.play_name='老男孩';
+#左连接，右连接
+	select * from play_list left join play_fav on play_list.id=play_fav.play_id;
+#union
+	mysql> select userid from play_list
+    -> union （all）
+    -> select userid from play_fav;
+
+
+##DML
+#多值插入
+	insert into ss values(1,'xiaohong'),(2,'xiaobai');
+#部分覆盖，用于主键重复时，有选择性的更新某些列值
+	insert into ss values(2,'xiaotian') on duplicate key update name='xiaotian';
+#连表update
+	update ss,sst set ss.name=sst.name where ss.id=sst.id;
+#连表删除
+	delete ss from ss,sst where ss.id=sst.id and sst.name=xinyue;
+
+
+#聚合函数
+	select album,sum(playcount),avg(playcount) from song_list group by album;
+	select max(playcount) from song_list;
+	select song_name,playcount from song_list order by playcount desc limit 1;
+	select album,group_concat(song_name) from song_list group by album;
+	select now() + interval 1 week;
+
+#比较运算
+
+#触发器
+	delimiter // 
+	CREATE TRIGGER trg_upd_score 
+	BEFORE UPDATE ON `stu`
+	FOR EACH ROW 
+	BEGIN 
+	IF NEW.score < 0 THEN 
+	SET NEW.score = 0; 
+	ELSEIF NEW.score > 100 THEN 
+	SET NEW.score = 100; 
+	END IF; 
+	END;// 
+	delimiter ; 
+
+#存储过程
+	DELIMITER ;
+	CREATE   PROCEDURE `proc_test1`(IN total INT,OUT res INT)
+	BEGIN   
+	DECLARE i INT;  
+	SET i = 1; 
+	SET res = 1; 
+	IF total <= 0 THEN   
+	SET total = 1;   
+	END IF;   
+	WHILE i <= total DO
+	SET res = res * i;
+	INSERT INTO tbl_proc_test(num) VALUES (res);  
+	SET i = i + 1;
+	END WHILE;
+	END
+	;;
+	DELIMITER ;
+#自定义函数
+	
+
+
+
+
+
+
+
+

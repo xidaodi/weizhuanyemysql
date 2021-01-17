@@ -1,0 +1,18 @@
+# 分区 partition
+	range分区：比如按照时间来分区，定期清理过期的大表；单个分区扫描迁移数据到历史库避免全表扫描IO开销；删除单个分区非常高效
+		create order tb_order(
+			order_id INT NOT NULL,
+			order_date DATE NOT NULL,
+			...
+		)
+		
+		PARTITION BY RANGE (YEAR (order_date)) (
+			PARTITION p0 VALUES LESS THAN (2014),
+			PARTITION p0 VALUES LESS THAN (2015),
+			PARTITION p0 VALUES LESS THAN (2016),
+			PARTITION p0 VALUES LESS THAN MAXVALUE,
+		);
+	
+	list分区：垂直改造，比如将中央数据库分别按照东西南北四个不同的区域拆表，适合将来可能要基于地区，类目等垂直拆分数据的方式
+	hash分区：适合将来需要做水平拆分的表，例如将用户表做水平分布式扩展。
+	

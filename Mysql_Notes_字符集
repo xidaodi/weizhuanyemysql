@@ -1,0 +1,9 @@
+## mysql 字符集
+
+#查看系统的字符集
+	show global variables like '%char%';
+	set global character_set_server=utf8;
+	
+#修改表的字符集
+	 alter table sst convert to character set utf8;
+# 程序连接的驱动的字符集 比如Navicat在connection里设置的connection character， 告知mysql的字符集 set names utf8，数据存储的字符集

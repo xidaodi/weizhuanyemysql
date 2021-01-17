@@ -1,0 +1,58 @@
+#Mysql日志分类
+	服务器日志：
+		服务器错误日志：
+			show global variables like "log_error";
+			实例启动和运行过程中的消息
+		慢查询日志:
+			记录执行时间超过一定阈值的SQL的语句
+			slow_query_log = 1；慢查询日志是否打开
+			slow_query_log_file； 日志文件
+			slow_query_time = 5; 需要记录的查询时间超过多少秒的日志
+			#操作
+				show global variables like "%slow%";
+				set slow_query_log =1;
+				show global variables like "%long%";
+				set global long_query_time =1;
+			
+		综合查询日志:
+			记录系统中所有的SQL语句
+		
+	#日志输出参数：
+	log_output = file|table|none;设置日志输出的形式，log文件还是表，建议是表
+	flush logs; 如果日志文件过大，可以定期截断并切换新文件
+		
+	事务日志：
+		存储引擎日志：
+			redo log （write ahead log 机制）： 帮助实现持久化或用于实例恢复
+			redo log的重用机制：ib_logfile0和 ib_logfile1 两个日志文件
+		二进制日志：服务层记录，无关存储引擎
+			binlog：
+				基于备份恢复数据
+				数据库主从同步
+				挖掘分析SQL语句
+			#操作：
+				 根据https://blog.csdn.net/tribalElders/article/details/53895982 找到mysql配置文件
+				 在配置文件中添加：
+					[mysqld]
+					log_bin=var/bin/mysql/mysql_bin
+					binlog-format=Row
+					server-id=1
+					保存
+				 重启：service mysql restart
+				 # tail -f /var/log/messages 可通过此命令查看报错信息
+				 ls | grep mysql-bin 
+			在mysql中查询：
+				show binary logs;
+				show binlog events in 'mysql-bin.000004';
+			
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				

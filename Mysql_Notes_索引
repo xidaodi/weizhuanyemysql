@@ -1,0 +1,13 @@
+# Innodb按照ID的索引叫做：
+	聚簇索引  cluster index
+#新创建的索引叫做：
+	secondary index
+#单列索引
+create index idx_name on table_name (column);
+
+#联合索引
+create index idx_name on table_name (column1，column2);
+
+#如何确定一个查询有没有走索引
+	explain select * from table_name where a=100;
+	
